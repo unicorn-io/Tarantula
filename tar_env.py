@@ -78,23 +78,26 @@ class HexSimulator:
         dis_x_direction = current_position[0]-self.init_position[0]
         dis_y_direction = current_position[1]-self.init_position[1]
         dis_z_direction = current_position[2]-self.init_position[2]
-        orientation = self.getpos()[1]
+        orientation = self.get_pos()[1]
         tilt_translation = math.sqrt(dis_y_direction**2+dis_z_direction**2+
                                     orientation[0]**2+orientation[1]**2+
                                     orientation[2]**2)
         reward = dis_x_direction / tilt_translation
+        self.init_position = current_position
         state_object = p.getBasePositionAndOrientation(self.bot)
         state_end_effectors = p.getLinkStates(self.bot, self.link_ids)
         done = True
         if (reward <= 0.00001):
             done == False
-        observation = p.getLinkStates(self.link_ids)
+        observation = []
+        for k in self.link_ids:
+            observation.append(p.getLinkState(self.bot, k))
         info = state_object
         return observation, reward, done, info
 
     def render(self, mode='human') :
-        view_matrix = p.computeViewMatrixFromYawPitchRoll(cameraTargetPosition=[self.get_pos()[0]],
-                                                        distance = 5,
+        view_matrix = p.computeViewMatrixFromYawPitchRoll(cameraTargetPosition=self.get_pos()[0],
+                                                        distance = 1,
                                                         yaw = 20,
                                                         pitch = 20,
                                                         roll = 0,
@@ -169,9 +172,11 @@ class HexSimulator:
         return joint_list
 
 def test_pod():
-    simu = HexSimulator(".\\pybul_test\\pexod.urdf")
+    simu = HexSimulator(".\\pexod.urdf")
     for i in range(10000):
-        simu.step([(0,0,1000),(0,0,0),(0,0,0),(0,0,0),(0,0,0),(0,0,0)])
+        if (i < 10): simu.step([(0,0,1000),(0,0,0),(0,0,0),(0,0,0),(0,0,0),(0,0,0)])
+        else: simu.step([(1000,0,-1000),(0,0,0),(0,0,0),(0,0,0),(0,0,0),(0,0,0)])
+        simu.render()
         time.sleep(1./240.)
     
 

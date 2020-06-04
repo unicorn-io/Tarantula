@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: hex-gym
+Version: 1.0.0
+Summary: A OpenAi Gym Environment for a hexapod
+Home-page: UNKNOWN
+License: UNKNOWN
+Description: <h1>Hexapod OpenAi Gym environment</h1>
+        <p>Uses an urdf file to import the pod in an GUI environment</p>
+        * Used fuzzy logic for the reward.<br>
+        * The reward function was calculated as the ratio of other observations with the displacement in x direction.<br>
+        <i>author: unicorn-io
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
